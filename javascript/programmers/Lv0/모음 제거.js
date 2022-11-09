@@ -1,0 +1,9 @@
+// https://school.programmers.co.kr/learn/courses/30/lessons/120849?language=javascript
+
+function solution(my_string) {
+  return my_string.replaceAll('a', '')
+    .replaceAll('e', '')
+    .replaceAll('i', '')
+    .replaceAll('o', '')
+    .replaceAll('u', '');
+}
