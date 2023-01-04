@@ -1,6 +1,6 @@
 // https://school.programmers.co.kr/learn/courses/30/lessons/17681
 
-function solution(n, arr1, arr2) {
+function solution1(n, arr1, arr2) {
   var answer = [];
 
   for (let i = 0; i < n; i++) {
@@ -17,5 +17,18 @@ function solution(n, arr1, arr2) {
     }
     answer.push(line.join(''));
   }
+  return answer;
+}
+
+function solution2(n, arr1, arr2) {
+  arr1 = arr1.map(v => v.toString(2).padStart(n, 0));
+  arr2 = arr2.map(v => v.toString(2).padStart(n, 0));
+
+  const arr = arr1.map((v, i) => parseInt(arr1[i]) + parseInt(arr2[i]))
+    .map(v => v.toString().padStart(n, 0));
+
+  const answer = arr.map(v => v.split('').map(v => v >= 1 ? '#' : ' ')
+    .join(''));
+
   return answer;
 }
