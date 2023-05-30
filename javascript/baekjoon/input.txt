@@ -1,0 +1,2 @@
+디렉토리 : /Users/jin/Documents/Study/algorithm/javascript/baekjoon/input.txt
+https://likethefirst.tistory.com/entry/JavaScript-Error-ENOENT-no-such-file-or-directory
