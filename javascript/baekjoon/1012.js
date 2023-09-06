@@ -1,46 +1,41 @@
 const fs = require('fs');
 const input = fs.readFileSync('/Users/jin/Documents/Study/algorithm/javascript/baekjoon/input.txt').toString().split('\n');
 
-function dfs(graph, n, m, x, y) {
-  // 범위를 벗어나면 즉시 종료
-  if (x <= -1 || x >= n || y <= -1 || y >= m) return false;
-  if (graph[x][y] === 1) {
-    // 해당 노드를 방문 처리한다.
-    graph[x][y] = -1;
-    // 상하좌우 위치를 모두 재귀적으로 호출한다.
-    dfs(graph, n, m, x - 1, y);
-    dfs(graph, n, m, x + 1, y);
-    dfs(graph, n, m, x, y - 1);
-    dfs(graph, n, m, x, y + 1);
+function dfs(x, y, m, n, graph) {
+  if (x >= m || x <= -1 || y >= n || y <= -1) {
+    return false;
+  }
+  if (graph[y][x] === 1) {
+    graph[y][x] = -1;
+    dfs(x - 1, y, m, n, graph);
+    dfs(x + 1, y, m, n, graph);
+    dfs(x, y - 1, m, n, graph);
+    dfs(x, y + 1, m, n, graph);
     return true;
   }
   return false;
 }
 
-let testCases = Number(input[0]);
+const testCases = Number(input[0]);
 let line = 1;
-
-while (testCases--) {
-  // m: 가로, n: 세로, k: 배추가 심어져있는 위치의 개수
-  const [m, n, k] = input[line].split(' ').map(v => Number(v));
-  const graph = [];
-  // 그래프를 0으로 채우기
-  for (let i = 0; i < n; i++) {
-    graph[i] = new Array(m).fill(0);
-  }
-
-  for (let i = 1; i <= k; i++) {
-    const [y, x] = input[i + line].split(' ').map(v => Number(v));
-    graph[x][y] = 1;
-  }
+for (let tc = 0; tc < testCases; tc++) {
+  // m: 가로, n: 세로, k: 배추 심어져 있는 위치
+  const [m, n, k] = input[line].split(' ').map(Number);
 
   let answer = 0;
-  for (let i = 0; i < n; i++) {
-    for (let j = 0; j < m; j++) {
-      if (dfs(graph, n, m, i, j)) answer++;
-    }
+  // 그래프 구현
+  const graph = [];
+  for (let i = 0; i < n; i++) graph.push(new Array(m).fill(0));
+  for (let i = 1; i <= k; i++) {
+    const [x, y] = input[i + line].split(' ').map(Number);
+    graph[y][x] = 1;
   }
 
-  line += k + 1; // 다음 테스트 케이스로 이동
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < m; j++) {
+      if (dfs(j, i, m, n, graph)) answer++;
+    }
+  }
   console.log(answer);
+  line += k + 1;
 }
