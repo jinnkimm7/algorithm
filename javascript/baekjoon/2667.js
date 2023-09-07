@@ -9,7 +9,6 @@ for (let i = 1; i <= n; i++) {
 }
 
 let count = 0;
-const apartments = [];
 
 function dfs(graph, n, x, y) {
   if (x <= -1 || x >= n || y <= -1 || y >= n) return false;
@@ -25,15 +24,14 @@ function dfs(graph, n, x, y) {
   return false;
 }
 
+let answer = [];
 for (let i = 0; i < n; i++) {
   for (let j = 0; j < n; j++) {
     if (dfs(graph, n, i, j)) {
-      apartments.push(count);
+      answer.push(count);
       count = 0;
     }
   }
 }
 
-apartments.sort((a, b) => a - b, 0);
-console.log(apartments.length);
-console.log(apartments.join('\n'));
+console.log(answer.length + '\n' + answer.sort((a, b) => a - b).join('\n'));
