@@ -1,37 +1,40 @@
 const fs = require('fs');
 const input = fs.readFileSync('/Users/jin/Documents/Study/algorithm/javascript/baekjoon/input.txt').toString().split('\n');
 
-const n = Number(input[0]); // 지도의 크기
-
+const n = Number(input[0]);
 const graph = [];
-for (let i = 1; i <= n; i++) {
-  graph.push(input[i].split('').map(v => Number(v)));
-}
+for (let i = 1; i <= n; i++) graph.push(input[i].split('').map(Number));
 
-let count = 0;
+function dfs(x, y, n, graph) {
+  // 탐색 범위를 벗어날 경우,
+  if (x >= n || x <= -1 || y >= n || y <= -1) return 0;
+  // 벽일 경우, 함수종료
+  if (graph[x][y] === 0) return 0;
 
-function dfs(graph, n, x, y) {
-  if (x <= -1 || x >= n || y <= -1 || y >= n) return false;
+  // 집일 경우 상하좌를 탐색한다.
   if (graph[x][y] === 1) {
-    count++;
-    graph[x][y] = -1;
-    dfs(graph, n, x - 1, y);
-    dfs(graph, n, x + 1, y);
-    dfs(graph, n, x, y - 1);
-    dfs(graph, n, x, y + 1);
-    return true;
+    graph[x][y] = -1; // 방문처리한다.
+    let count = 1;
+
+    count += dfs(x - 1, y, n, graph);
+    count += dfs(x + 1, y, n, graph);
+    count += dfs(x, y - 1, n, graph);
+    count += dfs(x, y + 1, n, graph);
+    return count;
   }
-  return false;
+  return 0;
 }
+
 
 let answer = [];
-for (let i = 0; i < n; i++) {
-  for (let j = 0; j < n; j++) {
-    if (dfs(graph, n, i, j)) {
-      answer.push(count);
-      count = 0;
+for (let i = 0; i <= n; i++) {
+  for (let j = 0; j <= n; j++) {
+    const value = dfs(i, j, n, graph);
+    if (value > 0) {
+      answer.push(value);
     }
   }
 }
 
-console.log(answer.length + '\n' + answer.sort((a, b) => a - b).join('\n'));
+answer.sort((a, b) => a - b);
+console.log(answer.length + '\n' + answer.join('\n'));
