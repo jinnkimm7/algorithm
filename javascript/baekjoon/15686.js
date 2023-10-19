@@ -1,51 +1,55 @@
 const fs = require('fs');
 const input = fs.readFileSync('/Users/jin/Documents/Study/algorithm/javascript/baekjoon/input.txt').toString().split('\n');
 
-// 도시의 크기 N, 치킨집의 개수 M
-const [N, M] = input[0].split(' ').map(Number);
+// n: 줄의 수, m: 최대 치킨집의 개수
+const [n, m] = input[0].split(' ').map(Number);
 
+// 그래프 정보 입력받기
 const graph = [];
-for (let i = 1; i <= N; i++) graph.push(input[i].split(' ').map(Number));
+for (let i = 1; i <= n; i++) graph.push(input[i].split(' ').map(Number));
 
-const house = [];
-const chicken = [];
+const houses = [];
+const chickenHouses = [];
 
-for (let i = 0; i < N; i++) {
-  for (let j = 0; j < N; j++) {
-    if (graph[i][j] === 1) house.push([i, j]);
-    if (graph[i][j] === 2) chicken.push([i, j]);
+for (let i = 0; i < n; i++) {
+  for (let j = 0; j < n; j++) {
+    if (graph[i][j] === 1) houses.push([i, j]);
+    if (graph[i][j] === 2) chickenHouses.push([i, j]);
   }
 }
 
-const visited = new Array(chicken.length).fill(false);
-const selected = [];
-let answer = 1e9;
-
+const answer = [];
+const combinations = [];
+const visited = new Array(chickenHouses.length).fill(false);
 function dfs(depth, start) {
-  if (depth === M) {
-    const result = []; // 조합의 결과를 처리하는 테이블
-    for (let i of selected) result.push(chicken[i]);
-    let sum = 0; // 치킨거리의 합
-    for (let [hx, hy] of house) {
-      let temp = 1e9;
-      for (let [cx, cy] of result) {
-        temp = Math.min(temp, Math.abs(hx - cx) + Math.abs(hy - cy));
+  if (depth === m) {
+    console.log(combinations);
+    let total = 0;
+    for (let i = 0; i < houses.length; i++) {
+      let dist = 1e9;
+      const [hx, hy] = houses[i];
+      for (let j = 0; j < combinations.length; j++) {
+        const [cx, cy] = combinations[j];
+        dist = Math.min(Math.abs(hx - cx) + Math.abs(hy - cy), dist);
       }
-      sum += temp;
+      total += dist;
     }
-    answer = Math.min(answer, sum);
+
+    answer.push(total);
     return;
   }
 
-  for (let i = start; i < chicken.length; i++) {
-    if (visited[i]) continue; // 중복을 허용하지 않으므로, 이미 처리된 원소라면 무시
-    selected.push(i); // 현재원소 선택
-    visited[i] = true; // 현재원소 방문처리
+  for (let i = start; i < chickenHouses.length; i++) {
+    if (visited[i]) continue;
+
+    combinations.push(chickenHouses[i]);
+    visited[i] = true;
     dfs(depth + 1, i + 1);
-    selected.pop();
+    combinations.pop();
     visited[i] = false;
   }
 }
 
 dfs(0, 0);
-console.log(answer);
+
+console.log(Math.min(...answer));
