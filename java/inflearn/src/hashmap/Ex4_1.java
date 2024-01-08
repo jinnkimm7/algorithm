@@ -6,6 +6,7 @@ import java.util.Scanner;
 public class Ex4_1 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
         String result = sc.next();
 
         Ex4_1 main = new Ex4_1();
