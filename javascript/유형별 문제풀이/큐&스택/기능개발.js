@@ -2,57 +2,35 @@
 // https://school.programmers.co.kr/learn/courses/30/lessons/42586?language=javascript
 
 function solution(progresses, speeds) {
-  const answer = [];
+    let answer = [];
+    const left_days = [];
+    let stack = [];
 
-  const days = [];
-  for (let i = 0; i < progresses.length; i++) {
-    days.push(Math.ceil((100 - progresses[i]) / speeds[i]));
-  }
+    for(let i = 0; i < progresses.length; i++) {
+        const progress = progresses[i];
+        const speed = speeds[i];
 
-  let maxDay = days[0];
-  let count = 1;
-
-  for (let i = 1; i < days.length; i++) {
-    if (maxDay < days[i]) {
-      answer.push(count);
-      count = 1;
-      maxDay = days[i];
-    } else {
-      count++;
+        const left_day = Math.ceil((100 - progress) / speed);
+        left_days.push(left_day);
     }
-  }
-  answer.push(count);
 
-  return answer;
-}
+    for(let left_day of left_days) {
+        if(stack.length == 0) {
+            stack.push(left_day);
+        } else {
+            if(stack[0] >= left_day) {
+                stack.push(left_day);
+            } else {
+                answer.push(stack.length);
+                stack = [];
+                stack.push(left_day);
+            }
+        }
+    }
 
-function solution(progresses, speeds) {
-  const answer = [];
-
-  const days = [];
-  for (let i = 0; i < progresses.length; i++) {
-    days.push(Math.ceil((100 - progresses[i]) / speeds[i]));
-  }
-
-  let stack = [];
-
-  while (days.length !== 0) {
-    const head = stack[0];
-    const day = days.shift();
-
-    if (!head) stack.push(day);
-    else {
-      if (head < day) {
+    if(stack.length !== 0) {
         answer.push(stack.length);
-        stack = [];
-        stack.push(day);
-      } else {
-        stack.push(day);
-      }
     }
 
-  }
-
-  if (stack.length) answer.push(stack.length);
-  return answer;
+    return answer;
 }
