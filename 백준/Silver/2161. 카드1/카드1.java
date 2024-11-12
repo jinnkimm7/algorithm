@@ -14,16 +14,14 @@ class Main {
       q.offer(i);
     }
 
-    while(!q.isEmpty()) {
-      try {
-      int num1 = q.poll();
-      System.out.print(num1 + " ");
+    while(q.size() > 1) {
+        int num1 = q.poll();
+        System.out.print(num1 + " ");
 
-      int num2 = q.poll();
-      q.offer(num2);
-      } catch(NullPointerException e) {
-        break;
-      }
+        int num2 = q.poll();
+        q.offer(num2);
     }
+
+    System.out.print(q.poll());
   }
 }
