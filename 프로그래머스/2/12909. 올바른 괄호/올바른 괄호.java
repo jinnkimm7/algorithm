@@ -1,15 +1,20 @@
+import java.util.*;
+
 class Solution {
     boolean solution(String s) {
-        String[] strArr = s.split("");
-        int count = 0;
+        Stack<Character> stack = new Stack<>();
         
-        for(int i = 0; i < strArr.length; i++) {
-            if(count == 0 && strArr[i].equals(")")) return false;
+        for(int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
             
-            if(strArr[i].equals("(")) count += 1;
-            else count -= 1;
+            if(c == '(') {
+                stack.push(c);
+            } else {
+                if(stack.isEmpty()) return false;
+                stack.pop();
+            }
         }
         
-        return count == 0 ? true : false;
+        return stack.isEmpty();
     }
 }
